@@ -10,12 +10,15 @@
 	</parent>
 	<groupId>cat.fornes.conceptes</groupId>
 	<artifactId>nosql-tags</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>nosql-tags</name>
 	<description>Demo d'utilització de nosql</description>
 
 	<properties>
 		<java.version>1.8</java.version>
+		
+		<!-- Lombok -->
+		<lombok-plugin.version>1.18.10.0</lombok-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -79,6 +82,10 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -111,6 +118,20 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok-maven-plugin</artifactId>
+				<version>${lombok-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>delombok</id>
+						<goals>
+							<goal>delombok</goal>
+						</goals>
+						<phase>generate-sources</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
