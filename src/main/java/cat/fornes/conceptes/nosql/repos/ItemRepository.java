@@ -15,11 +15,14 @@
 package cat.fornes.conceptes.nosql.repos;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.lang.Nullable;
 
 import cat.fornes.conceptes.nosql.models.items.Item;
+import cat.fornes.conceptes.nosql.models.tags.NamedTag;
 
 /**
  * Item repository.
@@ -29,8 +32,41 @@ import cat.fornes.conceptes.nosql.models.items.Item;
  */
 public interface ItemRepository extends MongoRepository<Item, String>
 {
-	List<Item> findByName(String name);
+	/**
+	 * Cerca item pel nom.
+	 * @param name El nom
+	 * @return L'item o {@link Optional#empty()} si no se'n troba cap amb el nom indicat
+	 */
+	Optional<Item> findByName(String name);
 	
-	@Query("{'tags' : { '$in' : ?0}}")
-	List<Item> findByTag(String tagValue);
+	/**
+	 * Cerca items per nom semblant.
+	 * @param name El nom
+	 * @return L'item o {@link Optional#empty()} si no se'n troba cap amb el nom indicat
+	 */
+	List<Item> findByNameLike(String name);
+	/**
+	 * Cerca items associats amb el tag indicat.
+	 * @param tagValue El tag
+	 * @param sort Opcional, per a indicar l'ordenació
+	 * @return La llista -pot ser buida- amb el resultat en l'ordre indicat
+	 */
+	List<Item> findByTagsContaining(String tagValue, @Nullable Sort sort);
+	
+	/**
+	 * Cerca items associats amb un {@link NamedTag} de {@link NamedTag#getName() nom} {@code tagName}.
+	 * @param tagName El nom del tag
+	 * @param sort Opcional, per a indicar l'ordenació
+	 * @return La llista -pot ser buida- amb el resultat en l'ordre indicat
+	 */
+	List<Item> findByNamedTags_NameEquals(String tagName, @Nullable Sort sort);
+	
+	/**
+	 * Cerca items associats amb un {@link NamedTag} de {@link NamedTag#getName() nom} {@code tagName} i que conté el {@code value} en la llista de {@link NamedTag#getValues() valors}.
+	 * @param tagName El nom del tag
+	 * @param value El valor del tag
+	 * @param sort Opcional, per a indicar l'ordenació
+	 * @return La llista -pot ser buida- amb el resultat en l'ordre indicat
+	 */
+	List<Item> findByNamedTags_NameEqualsAndNamedTags_ValuesContaining(String tagName, String value, @Nullable Sort sort);
 }

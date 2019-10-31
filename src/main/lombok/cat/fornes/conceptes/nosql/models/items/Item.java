@@ -15,8 +15,9 @@
 package cat.fornes.conceptes.nosql.models.items;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -57,19 +58,30 @@ public class Item implements Serializable
 	private @Singular @ObtainVia(method = "initTags") SortedSet<String> tags;
 	/**
 	 * Named tags are a list of free value tags associated with a name each.
-	 * @param namedTags A map of named tags, with name as key and {@link NamedTag} as value
-	 * @return A map of named tags, can be empty.
+	 * @param namedTags A {@link List} of named tags, can be empty
+	 * @return A {@link List} of named tags, can be empty
 	 */
-	private @Singular @ObtainVia(method = "initNamedTags") Map<String, NamedTag> namedTags;
+	private @Singular @ObtainVia(method = "initNamedTags") List<NamedTag> namedTags;
 	
 	@SuppressWarnings( "unused" )
-	private Map<String, NamedTag> initNamedTags()
+	private List<NamedTag> initNamedTags()
 	{
-		return new HashMap<>();
+		return new ArrayList<>();
 	}
 	@SuppressWarnings( "unused" )
 	private SortedSet<String> initTags()
 	{
 		return new TreeSet<>();
+	}
+	
+	public static Comparator<Item> getComparator()
+	{
+		return new Comparator<Item>() {
+			@Override
+			public int compare (Item o1, Item o2)
+			{
+				return o1.getName().compareTo(o2.getName());
+			}
+		};
 	}
 }

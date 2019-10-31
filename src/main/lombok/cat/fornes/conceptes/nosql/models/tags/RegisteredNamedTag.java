@@ -14,39 +14,29 @@
  */
 package cat.fornes.conceptes.nosql.models.tags;
 
-import java.io.Serializable;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import org.springframework.data.annotation.Id;
-
-import lombok.Builder.ObtainVia;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * A named tag is a free content tag with a name that enable grouping by name.
+ * {@link NamedTag} registered for assistance purposes.
  *
  * @author Octavi Fornés &lt;ofornes@albirar.cat&gt;
  * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@Document(collection = "namedTags")
 @NoArgsConstructor
-public class NamedTag implements Serializable
+public class RegisteredNamedTag extends NamedTag
 {
-	private static final long serialVersionUID = 5605093895748512162L;
+	private static final long serialVersionUID = -7456430379071695075L;
 	
-	@Id
-	private String name;
-	private @Singular @ObtainVia(method = "initValues") SortedSet<String> values;
-	
-
-	@SuppressWarnings( "unused" )
-	private SortedSet<String> initValues()
-	{
-		return new TreeSet<>();
-	}
+	private String description;
 }

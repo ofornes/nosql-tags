@@ -20,7 +20,9 @@ import java.util.TreeSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import cat.fornes.conceptes.nosql.ArrelNosqlTagsTestAbstracte;
 import cat.fornes.conceptes.nosql.models.items.Item.ItemBuilder;
+import cat.fornes.conceptes.nosql.models.tags.NamedTag;
 
 /**
  * Test of {@link Item} class.
@@ -28,9 +30,8 @@ import cat.fornes.conceptes.nosql.models.items.Item.ItemBuilder;
  * @author Octavi Fornés &lt;ofornes@albirar.cat&gt;
  * @since 1.0.0
  */
-public class ItemTest
+public class ItemTest extends ArrelNosqlTagsTestAbstracte
 {
-	private static final String [] TAGS = {"TAG1", "TAG2", "TAG3"};
 	@Test
 	public void testBuildersDefaults()
 	{
@@ -42,20 +43,28 @@ public class ItemTest
 		
 		Assertions.assertEquals("test", itm.getName());
 		Assertions.assertNotNull(itm.getNamedTags());
+		Assertions.assertTrue(itm.getNamedTags().isEmpty());
 		Assertions.assertNotNull(itm.getTags());
+		Assertions.assertTrue(itm.getTags().isEmpty());
 	}
+	
 	@Test
 	public void testSingulars()
 	{
 		Item itm;
 		@SuppressWarnings( "rawtypes" )
 		ItemBuilder itmBld;
-		
+
 		itmBld = Item.builder()
 				;
 		for(String t : TAGS)
 		{
 			itmBld.tag(t);
+		}
+		
+		for(NamedTag nt : NAMED_TAGS_TOMAQUET)
+		{
+			itmBld.namedTag(nt);
 		}
 		itm = itmBld.build();
 		
@@ -63,5 +72,7 @@ public class ItemTest
 		Assertions.assertNotNull(itm.getTags());
 		
 		Assertions.assertEquals(new TreeSet<>(Arrays.asList(TAGS)), itm.getTags());
+		Assertions.assertEquals(Arrays.asList(NAMED_TAGS_TOMAQUET), itm.getNamedTags());
 	}
+	
 }
